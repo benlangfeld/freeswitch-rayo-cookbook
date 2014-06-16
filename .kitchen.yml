@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 1024
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-12.04
+  - name: debian-7.4
+  - name: centos-6.5
+
+suites:
+- name: package
+  run_list:
+    - recipe[freeswitch-rayo]
+  attributes:
+    freeswitch:
+      local_ip: '0.0.0.0'
+      domain: 'foo.bar.com'
+- name: source
+  run_list:
+    - recipe[freeswitch-rayo]
+  attributes:
+    freeswitch:
+      install_method: 'source'
+      local_ip: '0.0.0.0'
+      domain: 'foo.bar.com'
