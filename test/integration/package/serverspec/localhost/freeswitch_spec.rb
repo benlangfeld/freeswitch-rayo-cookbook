@@ -23,10 +23,6 @@ describe 'FreeSWITCH' do
     it { should return_stdout /FreeSWITCH version/ }
   end
 
-  describe command('fs_cli -x "version"') do
-    it { should return_stdout /FreeSWITCH Version 1.2/ }
-  end
-
   describe port(5060) do
     it { should be_listening.with('tcp') }
     it { should be_listening.with('udp') }
@@ -48,5 +44,29 @@ describe 'FreeSWITCH' do
   # Local-network environments need to present the set IP in RTP
   describe command('sudo fs_cli -x "eval \$\${external_rtp_ip}"') do
     it { should return_stdout '0.0.0.0' }
+  end
+
+  describe port(5222) do
+    it { should be_listening.with('tcp') }
+  end
+
+  describe command('fs_cli -x "reload mod_rayo"') do
+    it { should return_stdout /\+OK module loaded/ }
+  end
+
+  describe command('fs_cli -x "reload mod_ssml"') do
+    it { should return_stdout /\+OK module loaded/ }
+  end
+
+  describe command('fs_cli -x "reload mod_flite"') do
+    it { should return_stdout /\+OK module loaded/ }
+  end
+
+  describe command('fs_cli -x "reload mod_pocketsphinx"') do
+    it { should return_stdout /\+OK module loaded/ }
+  end
+
+  describe command('fs_cli -x "reload mod_http_cache"') do
+    it { should return_stdout /\+OK module loaded/ }
   end
 end

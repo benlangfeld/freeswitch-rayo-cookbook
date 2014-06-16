@@ -1,58 +1,105 @@
-default['freeswitch']['install_method'] = "package"
-
-default['freeswitch']['user'] = "freeswitch"
-default['freeswitch']['group'] = case node['platform']
+node.default['freeswitch']['package']['packages'] = case node['platform']
 when 'ubuntu', 'debian'
-  'freeswitch'
+  %w(
+    freeswitch-meta-vanilla
+    freeswitch-mod-rayo
+    freeswitch-lang
+    freeswitch-music
+    freeswitch-sounds
+    freeswitch-mod-flite
+    freeswitch-mod-pocketsphinx
+    freeswitch-mod-http-cache
+    freeswitch-conf-rayo
+  )
 when 'redhat', 'centos', 'fedora'
-  'daemon'
+  %w(
+    freeswitch
+    freeswitch-event-rayo
+    freeswitch-lang-en
+    freeswitch-sounds-music
+    freeswitch-sounds-en-us-callie
+    freeswitch-asrtts-flite
+    freeswitch-asrtts-pocketsphinx
+    freeswitch-application-http-cache
+    freeswitch-config-rayo
+  )
 end
-default['freeswitch']['service'] = "freeswitch"
+node.default['freeswitch']['package']['config_template'] = 'rayo'
+node.default['freeswitch']['source']['config_template'] = 'rayo'
 
-default['freeswitch']['binpath']  = '/usr/bin'
-default['freeswitch']['confpath'] = '/etc/freeswitch'
-default['freeswitch']['homedir']  = '/var/lib/freeswitch'
+node.default['freeswitch']['source']['modules'] = %w[
+loggers/mod_console
+loggers/mod_logfile
+asr_tts/mod_flite
+asr_tts/mod_pocketsphinx
+applications/mod_cluechoo
+applications/mod_commands
+applications/mod_conference
+applications/mod_dptools
+applications/mod_db
+applications/mod_fifo
+applications/mod_hash
+applications/mod_http_cache
+applications/mod_expr
+applications/mod_esf
+applications/mod_fsv
+applications/mod_spandsp
+applications/mod_valet_parking
+applications/mod_voicemail
+codecs/mod_g723_1
+codecs/mod_amr
+codecs/mod_g729
+codecs/mod_h26x
+codecs/mod_speex
+dialplans/mod_dialplan_xml
+dialplans/mod_dialplan_asterisk
+endpoints/mod_sofia
+endpoints/mod_loopback
+event_handlers/mod_event_socket
+event_handlers/mod_cdr_csv
+event_handlers/mod_rayo
+formats/mod_native_file
+formats/mod_sndfile
+formats/mod_local_stream
+formats/mod_tone_stream
+formats/mod_ssml
+languages/mod_lua
+say/mod_say_en
+]
 
-default['freeswitch']['domain'] = node['fqdn']
-default['freeswitch']['local_ip'] = node['ec2'] ? node['ec2']['public_ipv4'] : node['ipaddress']
-default['freeswitch']['vars_template'] = "vars.xml.erb"
-default['freeswitch']['vars_template_cookbook'] = "freeswitch"
-
-default['freeswitch']['autoload_modules'] = %w[
+node.default['freeswitch']['autoload_modules'] = %w[
   mod_console
   mod_logfile
   mod_cdr_csv
   mod_event_socket
+  mod_rayo
   mod_sofia
   mod_loopback
   mod_commands
   mod_conference
-  mod_db
   mod_dptools
   mod_expr
-  mod_fifo
   mod_hash
-  mod_voicemail
   mod_esf
   mod_fsv
-  mod_cluechoo
-  mod_valet_parking
-  mod_httapi
+  mod_http_cache
   mod_dialplan_xml
-  mod_dialplan_asterisk
   mod_spandsp
-  mod_g723_1
-  mod_g729
-  mod_amr
+  mod_celt
   mod_speex
-  mod_h26x
-  mod_vp8
-  mod_b64
+  mod_opus
+  mod_ilbc
   mod_sndfile
   mod_native_file
+  mod_shell_stream
+  mod_shout
   mod_local_stream
   mod_tone_stream
-  mod_spidermonkey
+  mod_ssml
   mod_lua
+  mod_flite
+  mod_pocketsphinx
   mod_say_en
 ]
+
+node.default['freeswitch']['vars_template_cookbook'] = "freeswitch-rayo"
