@@ -8,7 +8,7 @@ version          "0.1.0"
 
 recipe "freeswitch-rayo", "Install FreeSWITCH and configure as a Rayo server"
 
-depends 'freeswitch', '~> 0.6.0'
+depends 'freeswitch', '~> 1.0'
 
 supports "debian", ">= 6.0"
 supports "ubuntu", ">= 12.04"
